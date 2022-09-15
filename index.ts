@@ -16,8 +16,6 @@ const newUrls = [
 const getUrl = (link: string) => {
     if (link.includes('http')) {
         return link
-    } else if (link.startsWith('/')) {
-        return `${url}/${link}`
     } else {
         return `${url}/${link}`
     }
