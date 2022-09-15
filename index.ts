@@ -36,8 +36,7 @@ const crawl = async (url: string) => {
     const { host } = urlParser.parse(url) as any
 
     links.filter(link => link.includes(host)).forEach(link => {
-        if (!foundOldLinks[link] && !newUrls.some((website) => link.toLowerCase().includes(website.toLowerCase()))) {
-            foundOldLinks[link] = true
+        if (!newUrls.some((website) => link.toLowerCase().includes(website.toLowerCase()))) {
             console.log(`Old Link: ${link} found on URL ${url}`);
         }
         if (link.includes(newUrls[0])) {
@@ -46,5 +45,5 @@ const crawl = async (url: string) => {
     })
 }
 
-    
+// if same old link found on multiple pages, flag that.
 crawl(url)
