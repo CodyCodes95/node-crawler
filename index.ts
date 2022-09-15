@@ -5,7 +5,10 @@ import * as urlParser from 'url';
 const url = "https://www.qnmu.org.au/Web"
 const newUrls = [
     "qnmu.org.au/Web",
-  "qnmu.org.au/Shared_Content"
+    "qnmu.org.au/Shared_Content",
+    "qnmu.org.au/CPD",
+    "qnmu.org.au/CoronavirusInformation",
+  "qnmu.org.au/DocumentsFolder"
 ]
 
 
@@ -42,7 +45,9 @@ const crawl = async (url: string) => {
             foundOldLinks[link] = true
             console.log(`Old Link: ${link} found on URL ${url}`);
         }
-        crawl(getUrl(link))
+        if (link.includes(newUrls[0])) {
+            crawl(getUrl(link))
+        }
     })
 }
 
