@@ -16,6 +16,9 @@ const newUrls = [
 const getUrl = (link: string) => {
     if (link.includes('http')) {
         return link
+    } else if (link.startsWith('/')) {
+        // console.log(`SHOURTCUT ${link}` )
+        return `${url}/${link}`
     } else {
         return `${url}/${link}`
     }
@@ -23,11 +26,13 @@ const getUrl = (link: string) => {
 
 const seenUrls = {} as any
 const foundOldLinks = {} as any
-
+let crawlCount = 0
+const oldLinks = [] as any
 
 const crawl = async (url: string) => {
     if (seenUrls[url]) return
     seenUrls[url] = true
+    crawlCount ++
     const res = await fetch(url)
     const html = await res.text()
     const $ = cheerio.load(html)
@@ -38,6 +43,7 @@ const crawl = async (url: string) => {
     links.filter(link => link.includes(host)).forEach(link => {
         if (!newUrls.some((website) => link.toLowerCase().includes(website.toLowerCase()))) {
             console.log(`Old Link: ${link} found on URL ${url}`);
+            oldLinks.push(link)
         }
         if (link.includes(newUrls[0])) {
             crawl(getUrl(link))
