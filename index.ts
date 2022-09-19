@@ -4,12 +4,9 @@ import * as urlParser from 'url';
 
 const url = "https://www.qnmu.org.au/Web"
 
-const newUrls = [
-    "qnmu.org.au/Web",
-    "qnmu.org.au/Shared_Content",
-    "qnmu.org.au/CPD",
-    "qnmu.org.au/CoronavirusInformation",
-  "qnmu.org.au/DocumentsFolder"
+const newUrls = ["reinz.imiscloud.com/Web",
+    "https://www.qnmu.org.au/Shared_Content",
+    "www.qnmu.org.au/Shared_Content/cpd",
 ]
 
 
@@ -41,9 +38,9 @@ const crawl = async (url: string) => {
     const { host } = urlParser.parse(url) as any
 
     links.filter(link => link.includes(host)).forEach(link => {
-        if (!newUrls.some((website) => link.toLowerCase().includes(website.toLowerCase()))) {
-            console.log(`Old Link: ${link} found on URL ${url}`);
-            oldLinks.push(link)
+        if (!newUrls.some((website: any) => link.toLowerCase().includes(website.toLowerCase()))) {
+            // console.log(`Old Link: ${link} found on URL ${url}`);
+            foundOldLinks[url] = foundOldLinks[url] ? [...foundOldLinks[url], link] : [link]
         }
         if (link.includes(newUrls[0])) {
             crawl(getUrl(link))
