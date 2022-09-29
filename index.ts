@@ -8,7 +8,10 @@ const newUrls = [
     "https://www.qnmu.org.au/Web",
     "https://www.qnmu.org.au/Shared_Content",
     "www.qnmu.org.au/cpd",
-    "www.qnmu.org.au/CoronavirusInformation"
+    "www.qnmu.org.au/CoronavirusInformation",
+    "https://www.qnmu.org.au/Awards_event",
+    "https://www.qnmu.org.au/DocumentsFolder",
+    "http://www.qnmu.org.au/join"
 ]
 
 
@@ -30,6 +33,7 @@ let pageFinished:any
 const crawl = async (url: string) => {
     pageFinished = false
     seenUrls[url] = true
+    // console.log(`Crawling ${url}`)
     crawlCount ++
     const res = await fetch(url)
     const html = await res.text()
@@ -38,14 +42,13 @@ const crawl = async (url: string) => {
     
     const { host } = urlParser.parse(url) as any
     
-    const hostLinks = links.filter((link, i) => {
-        return link.includes(host)
-    })
-    
-    for (let link of hostLinks) {
+    for (let link of links.filter(link => link.includes(host))) {
         if (!newUrls.some((website: any) => link.toLowerCase().includes(website.toLowerCase()))) {
-            console.log(`Old Link: ${link} found on URL ${url}`);
+            if (link.toLowerCase() !== "https://www.qnmu.org.au/") {
+                console.log(`Old Link: ${link} found on URL ${url}`);
+                console.log(" ")
             foundOldLinks[url] = foundOldLinks[url] ? [...foundOldLinks[url], link] : [link]
+        }
         }
         if (link.includes(newUrls[0]) && !seenUrls[getUrl(link)]) {
             await crawl(getUrl(link))
@@ -64,3 +67,5 @@ crawlAll()
 // Log the results when all pages have finished being crawled
 
 // if same old link found on multiple pages, flag that.
+
+// Option to return all of a specific URL
